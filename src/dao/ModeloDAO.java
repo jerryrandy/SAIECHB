@@ -8,7 +8,6 @@ package dao;
 import entidades.*;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,31 +18,22 @@ import java.util.List;
  */
 public class ModeloDAO {
     
-    public static String driver = "com.mysql.jdbc.Driver";
-    public static String url = "jdbc:mysql://localhost:3306/demo";
-    public static String usuario = "root";
-    public static String clave = "";    
-    
-    public static List<Modelo> listarActivosOrdenado() throws Exception
+      public static List<Modelo> listarActivosOrdenado() throws Exception
     {
         List<Modelo> listModelo = null;
         Connection conn =null;
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-            
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);
-            
             String sql="SELECT modelo.id_modelo,modelo.id_marca,modelo.id_tipo,"
                     + "modelo.nombre,modelo.caracteristica,modelo.activa,marca.nombre,"
                     + "tipo.nombre,tipo.ubicacion,tipo.caracteristica FROM modelo "
                     + "inner join marca inner join tipo where modelo.id_marca=marca.id_marca "
                     + "and modelo.id_tipo=tipo.id_tipo and modelo.activa=1 order by tipo.nombre ASC";
-            Class.forName(driver);
+  
+             conn = DBManager.getConnection();
             
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -86,19 +76,16 @@ public class ModeloDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-            
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);
-            
              String sql="SELECT modelo.id_modelo,modelo.id_marca,modelo.id_tipo,"
                     + "modelo.nombre,modelo.caracteristica,modelo.activa,marca.nombre,"
                     + "tipo.nombre,tipo.ubicacion,tipo.caracteristica FROM modelo "
                     + "inner join marca inner join tipo where modelo.id_marca=marca.id_marca "
                     + "and modelo.id_tipo=tipo.id_tipo order by tipo.nombre ASC";
-
-            stmt = conn.prepareCall(sql);
+  
+             conn = DBManager.getConnection();
             
+            conn = DBManager.getConnection();
+            stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
             while(dr.next())
@@ -132,19 +119,14 @@ public class ModeloDAO {
         return listModelo;
     }
        
-    public static List<Modelo> listarFiltro(String IdModelo) throws Exception
+          public static List<Modelo> listarFiltro(String IdModelo) throws Exception
     {
         List<Modelo> listModelo = null;
         Connection conn =null;
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-            
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);
-            
-            String sql="SELECT modelo.id_modelo,modelo.id_marca,modelo.id_tipo,"
+             String sql="SELECT modelo.id_modelo,modelo.id_marca,modelo.id_tipo,"
                     + "modelo.nombre,modelo.caracteristica,modelo.activa,marca.nombre,"
                     + "tipo.nombre,tipo.ubicacion,tipo.caracteristica FROM modelo "
                     + "inner join marca inner join tipo where modelo.id_marca=marca.id_marca "
@@ -153,6 +135,7 @@ public class ModeloDAO {
 
                      
        
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -194,14 +177,10 @@ public class ModeloDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-            
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);
              String sql="INSERT INTO modelo (id_marca,id_tipo,nombre,caracteristica,activa) VALUES ('"+
                      objModelo.getObjMarca().getInt_id_marca()+"','"+objModelo.getObjTipo().getInt_id_tipo()+
                      "', '"+objModelo.getStr_nombre()+"','"+objModelo.getStr_caracteristica()+"','"+objModelo.getInt_activa()+"')";
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
            rpta = stmt.executeUpdate() == 1;
         } catch (Exception e) {
@@ -222,16 +201,11 @@ public class ModeloDAO {
         Connection conn = null;
         CallableStatement stmt = null;
         try {
-            
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);
-            
             String sql=" UPDATE modelo SET id_marca='"+objModelo.getObjMarca().getInt_id_marca()+
                     "',id_tipo='"+objModelo.getObjTipo().getInt_id_tipo()+"',nombre='"+objModelo.getStr_nombre()+
                     "',caracteristica='"+objModelo.getStr_caracteristica()+"',activa='"+objModelo.getInt_activa()+
                     "' WHERE id_modelo = '"+objModelo.getInt_id_modelo()+"'";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             rpta = stmt.executeUpdate() == 1;
 
@@ -254,13 +228,8 @@ public class ModeloDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-            
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);
             String sql="Delete From modelo Where id_modelo="+IdModelo;
-            
-        
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             rpta = stmt.executeUpdate() == 1;
         } catch (Exception e) {
@@ -282,16 +251,16 @@ public class ModeloDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         ResultSet dr = null;
-        try {           
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);            
+        try {                 
                String sql="SELECT modelo.id_modelo,modelo.id_marca,modelo.id_tipo,"
                     + "modelo.nombre,modelo.caracteristica,modelo.activa,marca.nombre,"
                     + "tipo.nombre,tipo.ubicacion,tipo.caracteristica FROM modelo "
                     + "inner join marca inner join tipo where modelo.id_marca=marca.id_marca "
                     + "and modelo.id_tipo=tipo.id_tipo and modelo.activa=1 and tipo.id_tipo="+IdTipo+" order by tipo.nombre ASC";   
 
+            
+            conn = DBManager.getConnection();    
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -331,10 +300,7 @@ public class ModeloDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         ResultSet dr = null;
-        try {                
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);            
+        try {                 
                String sql="SELECT modelo.id_modelo,modelo.id_marca,modelo.id_tipo,"
                     + "modelo.nombre,modelo.caracteristica,modelo.activa,marca.nombre,"
                     + "tipo.nombre,tipo.ubicacion,tipo.caracteristica FROM modelo "
@@ -342,6 +308,9 @@ public class ModeloDAO {
                     + "and modelo.id_tipo=tipo.id_tipo and modelo.activa=1 and tipo.id_tipo="+IdTipo+" "
                     + "and marca.id_marca="+IdMarca+" order by tipo.nombre ASC";   
 
+            
+            conn = DBManager.getConnection();    
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 

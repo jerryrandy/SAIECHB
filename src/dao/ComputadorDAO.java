@@ -1,4 +1,7 @@
-
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package dao;
 
 
@@ -6,26 +9,26 @@ import entidades.*;
 import entidades.Computador;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * @author Toditos
+ */
 public class ComputadorDAO {
-    public static String driver = "com.mysql.jdbc.Driver";
-    public static String url = "jdbc:mysql://localhost:3306/demo";
-    public static String usuario = "root";
-    public static String clave = "";
+    
           public static String verificarNombre(String Nombre) throws Exception {
          String rpta = "";
         Connection conn =null;
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-            Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
               String sql="SELECT id_computador From computador Where  id_computador like '"+Nombre+"'";
-          
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -55,13 +58,12 @@ public class ComputadorDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-    Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
+   
                String sql="INSERT INTO computador (id_computador,id_cpu,id_monitor,id_empleado,estado) VALUES ('"+
                        objComputador.getStr_id_computador()+"','"+objComputador.getObjCPU().getStr_id_cpu()+"','"+
                        objComputador.getObjMonitor().getStr_id_monitor()+"','"+objComputador.getObjEmpleado().getInt_id_empleado()+
                        "','"+objComputador.getInt_estado()+"');";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
            rpta = stmt.executeUpdate() == 1;
            int IdEmpleado= objComputador.getObjEmpleado().getInt_id_empleado();
@@ -90,9 +92,7 @@ public class ComputadorDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         ResultSet dr = null;
-        try {         
-             Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
+        try {               
                      String sql="SELECT computador.id_computador,computador.id_cpu,computador.id_monitor,computador.id_empleado,"
                     + "computador.estado,empleado.id_cargo,empleado.id_area,empleado.apellidos,"
                     + "empleado.nombres,empleado.usuario,empleado.activa,empleado.estado,area.nombre,area.id_departamento,"
@@ -103,7 +103,7 @@ public class ComputadorDAO {
                     + "departamento.nombre like '%"+filtro+"%' or area.nombre like '%"+filtro+"%' or empleado.usuario like '%"+filtro+"%' or "
                     + "empleado.nombres like '%"+filtro+"%' or empleado.apellidos like '%"+filtro+"%' or cargo.nombre like '%"+filtro+"%' or "
                     + "computador.id_computador like '"+filtro+"%') order by computador.id_computador ASC";
-      
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -168,10 +168,7 @@ public class ComputadorDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         ResultSet dr = null;
-        try {      
-            
-             Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
+        try {               
                      String sql="SELECT computador.id_computador,computador.id_cpu,computador.id_monitor,computador.id_empleado,"
                     + "computador.estado,empleado.id_cargo,empleado.id_area,empleado.apellidos,"
                     + "empleado.nombres,empleado.usuario,empleado.activa,empleado.estado,area.nombre,area.id_departamento,"
@@ -179,7 +176,7 @@ public class ComputadorDAO {
                     + "inner join cargo inner join monitor where computador.id_empleado=empleado.id_empleado and empleado.id_area=area.id_area and "
                     + "area.id_departamento=departamento.id_departamento and empleado.id_cargo=cargo.id_cargo and computador.id_monitor=monitor.id_monitor and "
                     + " computador.estado='"+Estado+"' order by computador.id_computador ASC";
-          
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -244,14 +241,12 @@ public class ComputadorDAO {
         Connection conn = null;
         CallableStatement stmt = null;
         try {
-             Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql=" UPDATE computador SET id_cpu='"+objComputador.getObjCPU().getStr_id_cpu()+
                     "',id_monitor='"+objComputador.getObjMonitor().getStr_id_monitor()+
                     "',id_empleado='"+objComputador.getObjEmpleado().getInt_id_empleado()+
                      "',estado='"+objComputador.getInt_estado()+
                     "' WHERE id_computador like '"+objComputador.getStr_id_computador()+"'";
-          
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             rpta = stmt.executeUpdate() == 1;
 

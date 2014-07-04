@@ -5,11 +5,14 @@
 package dao;
 
 
+
+
 import entidades.*;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,10 +21,7 @@ import java.util.List;
  * @author Toditos
  */
 public class ImpresoraDAO {
-     public static String driver = "com.mysql.jdbc.Driver";
-    public static String url = "jdbc:mysql://localhost:3306/demo";
-    public static String usuario = "root";
-    public static String clave = "";
+    
    
          
               public static String verificarNSerie(String nSerie) throws Exception {
@@ -30,10 +30,8 @@ public class ImpresoraDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-              Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
              String sql="SELECT id_impresora From impresora Where id_impresora="+nSerie;
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -62,12 +60,11 @@ public class ImpresoraDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-            Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
+   
                String sql="INSERT INTO impresora (id_impresora,id_componente,id_empleado,estado) VALUES ('"+
                        objImpresora.getStr_id_impresora()+"','"+objImpresora.getObjComponente().getStr_id_componente()+
                         "','"+objImpresora.getObjEmpleado().getInt_id_empleado()+"','"+objImpresora.getInt_estado()+"');";
-         
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
            rpta = stmt.executeUpdate() == 1;
             String IdComponente= objImpresora.getObjComponente().getStr_id_componente();
@@ -95,9 +92,7 @@ public class ImpresoraDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         ResultSet dr = null;
-        try {    
-              Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
+        try {               
                      String sql="SELECT impresora.id_impresora,impresora.id_componente,"
                              + "impresora.id_empleado,impresora.estado,componente.id_modelo,"
                              + "componente.caracteristica,modelo.id_marca,modelo.id_tipo,modelo.nombre,"
@@ -110,7 +105,7 @@ public class ImpresoraDAO {
                              + "and area.id_departamento=departamento.id_departamento and empleado.id_cargo=cargo.id_cargo "
                              + "and impresora.id_componente=componente.id_componente and componente.id_modelo=modelo.id_modelo "
                              + "and modelo.id_marca=marca.id_marca and modelo.id_tipo=tipo.id_tipo and impresora.estado='"+Estado+"' order by marca.nombre ASC";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -184,10 +179,8 @@ public class ImpresoraDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-              Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="Delete From impresora Where id_impresora like '"+IdImpresora+"'";
-          
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             rpta = stmt.executeUpdate() == 1;
         } catch (Exception e) {

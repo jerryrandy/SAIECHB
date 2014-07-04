@@ -3,11 +3,9 @@
  * and open the template in the editor.
  */
 package dao;
-
 import entidades.*;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -17,30 +15,17 @@ import java.util.List;
  *
  * @author Toditos
  */
-
-
-
 public class HistorialComponenteDAO {
-    
-    public static String driver = "com.mysql.jdbc.Driver";
-    public static String url = "jdbc:mysql://localhost:3306/demo";
-    public static String usuario = "root";
-    public static String clave = "";
-    
      public static boolean insertar(String IdComponente,String Descripcion) throws Exception
     {
          boolean rpta = false;
         Connection conn =null;
         CallableStatement stmt = null;
-        
         try {
-            
-            Class.forName(driver);
-            conn = DriverManager.getConnection(url,usuario,clave);
                   
                String sql = "INSERT INTO historial_componente (id_componente,fecha,descripcion)"
                        + " VALUES ('"+IdComponente+"',curdate(),'"+Descripcion+"')";
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
            rpta = stmt.executeUpdate() == 1;
 
@@ -64,10 +49,8 @@ public class HistorialComponenteDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {     
-            Class.forName(driver);
-            conn = DriverManager.getConnection(url,usuario,clave);            
             String sql="SELECT id_componente,fecha,descripcion FROM historial_componente where id_componente like '"+IdComponente+"' order by fecha DESC";
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 

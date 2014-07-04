@@ -1,20 +1,24 @@
-
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package dao;
 
 import com.mysql.jdbc.Statement;
+import entidades.Area;
 import entidades.Departamento;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * @author Toditos
+ */
 public class DepartamentoDAO {
-      public static String driver = "com.mysql.jdbc.Driver";
-    public static String url = "jdbc:mysql://localhost:3306/demo";
-    public static String usuario = "root";
-    public static String clave = "";
+    
     
          public static List<Departamento> listarActivos() throws Exception
     {
@@ -23,12 +27,12 @@ public class DepartamentoDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-            Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT id_departamento,nombre,iniciales,activa,descripcion "
                     + "FROM departamento where activa=1";
 
-         
+            conn = DBManager.getConnection();
+            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -63,10 +67,8 @@ public class DepartamentoDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-              Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT id_departamento,nombre,iniciales,activa,descripcion FROM departamento where activa=1 order by nombre ASC";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -100,10 +102,8 @@ public class DepartamentoDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-              Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT id_departamento,nombre,iniciales,activa,descripcion FROM departamento order by nombre ASC";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -136,10 +136,8 @@ public class DepartamentoDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-             Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT id_departamento,nombre,iniciales,activa,descripcion FROM departamento where nombre like '"+filtro+"%' order by nombre ASC";
-         
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -169,11 +167,9 @@ public class DepartamentoDAO {
     {
   
          int rpta=-1;
-        Connection conn = null;
+        Connection conn =DBManager.getConnection();
         Statement stmt = null;
         try {
-             Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             stmt = (Statement) conn.createStatement();
              String sql="INSERT INTO departamento (nombre,iniciales, activa, descripcion) VALUES ('"+objDepartamento.getStr_nombre()+
                      "', '"+objDepartamento.getStr_iniciales()+"','"+objDepartamento.getIntl_activa()+"','"+objDepartamento.getStr_descripcion()+"');";
@@ -205,12 +201,10 @@ public class DepartamentoDAO {
         Connection conn = null;
         CallableStatement stmt = null;
         try {
-             Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql=" UPDATE departamento SET nombre='"+objDepartamento.getStr_nombre()+
                     "',activa='"+objDepartamento.getIntl_activa()+"',iniciales='"+objDepartamento.getStr_iniciales()+"',descripcion='"+objDepartamento.getStr_descripcion()+
                     "' WHERE id_departamento = '"+objDepartamento.getInt_id_departamento()+"'";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             rpta = stmt.executeUpdate() == 1;
 
@@ -232,10 +226,8 @@ public class DepartamentoDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-             Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="Delete From departamento Where id_departamento="+IdDepartamento;
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             rpta = stmt.executeUpdate() == 1;
         } catch (Exception e) {

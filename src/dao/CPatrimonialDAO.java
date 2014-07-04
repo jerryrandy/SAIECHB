@@ -5,12 +5,14 @@
 package dao;
 
 
-
+import entidades.CPU;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
-
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -18,10 +20,7 @@ import java.sql.ResultSet;
  */
 public class CPatrimonialDAO {
     
-   public static String driver = "com.mysql.jdbc.Driver";
-    public static String url = "jdbc:mysql://localhost:3306/demo";
-    public static String usuario = "root";
-    public static String clave = "";
+   
     
               public static String verificarCPatrimonial(String nPatrimonial) throws Exception {
          String rpta = "";
@@ -29,11 +28,8 @@ public class CPatrimonialDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-             Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
-
              String sql="SELECT id_patrimonial From patrimonial Where id_patrimonial like '"+nPatrimonial+"'";
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -63,11 +59,10 @@ public class CPatrimonialDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-             Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
+
                String sql="INSERT INTO patrimonial (id_patrimonial,estado) VALUES ('"+
                        nPatrimonial+"','0');";
-        
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
            rpta = stmt.executeUpdate() == 1;
            

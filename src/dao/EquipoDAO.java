@@ -7,12 +7,12 @@ package dao;
 
 
 
-
 import entidades.*;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,10 +22,7 @@ import java.util.List;
  */
 public class EquipoDAO {
     
-    public static String driver = "com.mysql.jdbc.Driver";
-    public static String url = "jdbc:mysql://localhost:3306/demo";
-    public static String usuario = "root";
-    public static String clave = "";
+   
          
               public static String verificarNSerie(String nSerie) throws Exception {
          String rpta = "";
@@ -33,10 +30,8 @@ public class EquipoDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-              Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
              String sql="SELECT id_equipo From equipo Where id_equipo="+nSerie;
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -65,12 +60,11 @@ public class EquipoDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-            Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
+   
                String sql="INSERT INTO equipo (id_equipo,id_componente,id_empleado,estado) VALUES ('"+
                        objEquipo.getStr_id_equipo()+"','"+objEquipo.getObjComponente().getStr_id_componente()+
                         "','"+objEquipo.getObjEmpleado().getInt_id_empleado()+"','"+objEquipo.getInt_estado()+"');";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
            rpta = stmt.executeUpdate() == 1;
             String IdComponente= objEquipo.getObjComponente().getStr_id_componente();
@@ -104,9 +98,7 @@ public class EquipoDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         ResultSet dr = null;
-        try {           
-              Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
+        try {               
                      String sql="SELECT equipo.id_equipo,equipo.id_componente,"
                              + "equipo.id_empleado,equipo.estado,componente.id_modelo,"
                              + "componente.caracteristica,modelo.id_marca,modelo.id_tipo,modelo.nombre,"
@@ -119,7 +111,7 @@ public class EquipoDAO {
                              + "and area.id_departamento=departamento.id_departamento and empleado.id_cargo=cargo.id_cargo "
                              + "and equipo.id_componente=componente.id_componente and componente.id_modelo=modelo.id_modelo "
                              + "and modelo.id_marca=marca.id_marca and modelo.id_tipo=tipo.id_tipo and equipo.estado='"+Estado+"' order by marca.nombre ASC";
-        
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -193,10 +185,8 @@ public class EquipoDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-              Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="Delete From equipo Where id_equipo like '"+IdEquipo+"'";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             rpta = stmt.executeUpdate() == 1;
         } catch (Exception e) {

@@ -8,7 +8,6 @@ package dao;
 import entidades.Proveedor;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -20,26 +19,18 @@ import java.util.List;
  */
 public class ProveedorDAO {
     
-    public static String driver = "com.mysql.jdbc.Driver";
-    public static String url = "jdbc:mysql://localhost:3306/demo";
-    public static String usuario = "root";
-    public static String clave = "";    
+    
   
-    public static List<Proveedor> listarActivosOrdenado() throws Exception
+            public static List<Proveedor> listarActivosOrdenado() throws Exception
     {
         List<Proveedor> listProveedor = null;
         Connection conn =null;
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-            
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);
-            
           String sql="SELECT id_proveedor,nombre,direcion,telefono,fax,activa,descripcion FROM proveedor where activa=1  order by nombre ASC";
       
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -68,22 +59,13 @@ public class ProveedorDAO {
 
             public static List<Proveedor> listarTodosOrdenado() throws Exception
     {
-        
         List<Proveedor> listProveedor = null;
         Connection conn =null;
         CallableStatement stmt = null;
         ResultSet dr = null;
-        
-        
-        
         try {
-            
-            
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);            
             String sql="SELECT id_proveedor,nombre,direcion,telefono,fax,activa,descripcion FROM proveedor  order by nombre ASC";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -116,12 +98,8 @@ public class ProveedorDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-            
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);            
             String sql="SELECT id_proveedor,nombre,direcion,telefono,fax,activa,descripcion FROM proveedor where nombre like '%"+filtro+"%' order by nombre ASC";
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -152,13 +130,9 @@ public class ProveedorDAO {
     {
         
         int rpta=-1;
-        Connection conn = null;
+        Connection conn =DBManager.getConnection();
         Statement stmt = null;
         try {
-            
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);            
             stmt = (Statement) conn.createStatement();
             String sql="INSERT INTO proveedor (nombre,direcion,telefono,fax,activa,descripcion ) VALUES ('"+objProveedor.getStr_nombre()+
                      "', '"+objProveedor.getStr_direccion()+"','"+objProveedor.getStr_telefono()+
@@ -193,16 +167,12 @@ public class ProveedorDAO {
         Connection conn = null;
         CallableStatement stmt = null;
         try {
-            
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);            
             String sql=" UPDATE proveedor SET nombre='"+objProveedor.getStr_nombre()+
                     "',direcion='"+objProveedor.getStr_direccion()+"',telefono='"+objProveedor.getStr_telefono()+
                     "',fax='"+objProveedor.getStr_fax()+"',activa='"+objProveedor.getIntl_activa()+
                     "',descripcion='"+objProveedor.getStr_descripcion()+
                     "' WHERE id_proveedor = '"+objProveedor.getInt_id_proveedor()+"'";
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             rpta = stmt.executeUpdate() == 1;
 
@@ -224,12 +194,8 @@ public class ProveedorDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-            
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);            
             String sql="Delete From proveedor Where id_proveedor="+IdProveedor;
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             rpta = stmt.executeUpdate() == 1;
         } catch (Exception e) {

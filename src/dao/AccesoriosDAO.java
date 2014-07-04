@@ -5,10 +5,10 @@
 package dao;
 
 
+
 import entidades.*;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -21,19 +21,15 @@ import java.util.List;
  */
 public class AccesoriosDAO {
     
-    public static String driver = "com.mysql.jdbc.Driver";
-    public static String url = "jdbc:mysql://localhost:3306/demo";
-    public static String usuario = "root";
-    public static String clave = "";
+   
         
        public static boolean verificarNSerie(String nSerie) throws Exception {
          boolean rpta = false;
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-              Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT * From accesorios Where id_accesorios="+nSerie;
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             rpta = stmt.executeUpdate() == 1;
         } catch (Exception e) {
@@ -54,11 +50,10 @@ public class AccesoriosDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-            Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
+   
                String sql="INSERT INTO accesorios (id_accesorios,id_componente) VALUES ('"+
                        objAccesorios.getStr_id_accesorios()+"','"+objAccesorios.getObjComponente().getStr_id_componente()+"');";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
            rpta = stmt.executeUpdate() == 1;
            if(rpta)
@@ -79,17 +74,16 @@ public class AccesoriosDAO {
         return rpta;
     }
 
- public static boolean insertarAcc(Accesorios objAccesorios) throws Exception
+             public static boolean insertarAcc(Accesorios objAccesorios) throws Exception
     {
          boolean rpta = false;
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-            Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
+   
                String sql="INSERT INTO accesorios (id_accesorios,id_componente) VALUES ('"+
                        objAccesorios.getStr_id_accesorios()+"','"+objAccesorios.getObjComponente().getStr_id_componente()+"');";
-          
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
            rpta = stmt.executeUpdate() == 1;
      
@@ -113,9 +107,7 @@ public class AccesoriosDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         ResultSet dr = null;
-        try {    
-            Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
+        try {     
             String sql="SELECT componente.id_componente,componente.id_modelo,"
                     + "componente.estado,componente.garantia,componente.caracteristica,"
                     + "modelo.id_marca,modelo.id_tipo,modelo.nombre,modelo.caracteristica,"
@@ -125,7 +117,7 @@ public class AccesoriosDAO {
                     + "and accesorios.id_componente=componente.id_componente "
                     + "and componente.id_modelo=modelo.id_modelo and modelo.id_marca=marca.id_marca "
                     + "and modelo.id_tipo=tipo.id_tipo and computador_accesorios.id_computador  like '"+IdComputador+"'  order by tipo.nombre ASC";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -192,10 +184,10 @@ public class AccesoriosDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-            Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
+
                String sql="INSERT INTO computador_accesorios (id_computador,id_accesorios) VALUES ('"+
                        IdComputdor+"','"+IdAccesorios+"')";
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
            rpta = stmt.executeUpdate() == 1;
            
@@ -221,8 +213,6 @@ public class AccesoriosDAO {
       CallableStatement stmt = null;
       ResultSet dr = null;
       try {
-          Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
           String sql="SELECT componente.id_componente,componente.id_modelo,"
                   + "componente.estado,componente.garantia,componente.caracteristica,"
                   + "modelo.id_marca,modelo.id_tipo,modelo.nombre,modelo.caracteristica,"
@@ -231,7 +221,7 @@ public class AccesoriosDAO {
                   + "join marca inner join tipo where accesorios.id_componente=componente.id_componente "
                   + "and componente.id_modelo=modelo.id_modelo and modelo.id_marca=marca.id_marca "
                   + "and modelo.id_tipo=tipo.id_tipo and componente.estado='"+Estado+"'  order by tipo.nombre ASC";
-       
+          conn = DBManager.getConnection();
           stmt = conn.prepareCall(sql);
           dr = stmt.executeQuery();
           
@@ -296,11 +286,9 @@ public class AccesoriosDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-            Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
              String sql="Delete From computador_accesorios Where id_computador like '"+IdComputador+"' and id_accesorios like '"+IdAccesorios+"'";
     
-         
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
            rpta = stmt.executeUpdate() == 1;
         } catch (Exception e) {

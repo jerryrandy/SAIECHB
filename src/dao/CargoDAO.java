@@ -1,21 +1,23 @@
-
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package dao;
-
 
 import entidades.Cargo;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * @author Toditos
+ */
 public class CargoDAO {
     
-    public static String driver = "com.mysql.jdbc.Driver";
-    public static String url = "jdbc:mysql://localhost:3306/demo";
-    public static String usuario = "root";
-    public static String clave = "";
+    
     
             public static List<Cargo> listarActivosOrdenado() throws Exception
     {
@@ -24,10 +26,8 @@ public class CargoDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-            Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT id_cargo,nombre,activa,descripcion FROM cargo where activa=1 order by nombre ASC";
-          
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -61,10 +61,8 @@ public class CargoDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-            Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT id_cargo,nombre,activa,descripcion FROM cargo order by nombre ASC";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -97,10 +95,8 @@ public class CargoDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-            Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT id_cargo,nombre,activa,descripcion FROM cargo where nombre like '"+filtro+"%' order by nombre ASC";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
    while(dr.next())
@@ -131,11 +127,9 @@ public class CargoDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-            Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
              String sql="INSERT INTO cargo (nombre,activa, descripcion) VALUES ('"+objCargo.getStr_nombre()+
                      "','"+objCargo.getIntl_activa()+"','"+objCargo.getStr_descripcion()+"');";
-          
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
            rpta = stmt.executeUpdate() == 1;
         } catch (Exception e) {
@@ -157,12 +151,10 @@ public class CargoDAO {
         Connection conn = null;
         CallableStatement stmt = null;
         try {
-            Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql=" UPDATE cargo SET nombre='"+objCargo.getStr_nombre()+
                     "',activa='"+objCargo.getIntl_activa()+"',descripcion='"+objCargo.getStr_descripcion()+
                     "' WHERE id_cargo = '"+objCargo.getInt_id_cargo()+"'";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             rpta = stmt.executeUpdate() == 1;
 
@@ -184,10 +176,8 @@ public class CargoDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-            Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="Delete From cargo Where id_cargo="+IdCargo;
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             rpta = stmt.executeUpdate() == 1;
         } catch (Exception e) {

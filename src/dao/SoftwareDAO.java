@@ -7,7 +7,6 @@ package dao;
 import entidades.Software;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,25 +17,17 @@ import java.util.List;
  */
 public class SoftwareDAO {
     
-    public static String driver = "com.mysql.jdbc.Driver";
-    public static String url = "jdbc:mysql://localhost:3306/demo";
-    public static String usuario = "root";
-    public static String clave = "";    
     
-    public static List<Software> listarActivosOrdenado() throws Exception
+    
+            public static List<Software> listarActivosOrdenado() throws Exception
     {
         List<Software> listSoftware = null;
         Connection conn =null;
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-            
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);
-            
             String sql="SELECT id_software,nombre,tipo,activa FROM software where activa=1 order by nombre ASC";
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -68,13 +59,8 @@ public class SoftwareDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-            
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);
-            
             String sql="SELECT id_software,nombre,tipo,activa FROM software where activa=1 and tipo="+Tipo+" order by nombre ASC";
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -107,16 +93,11 @@ public class SoftwareDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-            
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);
-            
             String sql="SELECT id_software,nombre,tipo,activa FROM software order by nombre ASC";
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
-        while(dr.next())
+   while(dr.next())
             {
                  if(listSoftware == null)
                     listSoftware = new ArrayList<Software>();
@@ -145,11 +126,8 @@ public class SoftwareDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);            
             String sql="SELECT id_software,nombre,tipo,activa FROM software where nombre like '%"+filtro+"%' order by nombre ASC";
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
           while(dr.next())
@@ -180,13 +158,9 @@ public class SoftwareDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);    
-            
-            String sql="INSERT INTO software (nombre,tipo,activa) VALUES ('"+obSoftware.getStr_nombre()+
+             String sql="INSERT INTO software (nombre,tipo,activa) VALUES ('"+obSoftware.getStr_nombre()+
                      "','"+obSoftware.getInt_tipo()+"','"+obSoftware.getInt_activa()+"');";
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
            rpta = stmt.executeUpdate() == 1;
         } catch (Exception e) {
@@ -208,15 +182,10 @@ public class SoftwareDAO {
         Connection conn = null;
         CallableStatement stmt = null;
         try {
-
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);
-            
             String sql=" UPDATE software SET nombre='"+objSoftware.getStr_nombre()+
                     "',tipo='"+objSoftware.getInt_tipo()+"',activa='"+objSoftware.getInt_activa()+
                     "' WHERE id_software = '"+objSoftware.getInt_id_software()+"'";
-          
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             rpta = stmt.executeUpdate() == 1;
 
@@ -238,13 +207,8 @@ public class SoftwareDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-            
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);            
-            
             String sql="Delete From software Where id_software="+IdSoftware;
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             rpta = stmt.executeUpdate() == 1;
         } catch (Exception e) {
@@ -267,16 +231,11 @@ public class SoftwareDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-            
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);
-            
             String sql="SELECT software.id_software,software.nombre,software.tipo,software.activa "
                     + "FROM empleado_software inner join software where "
                     + "empleado_software.id_software=software.id_software and "
                     + "empleado_software.id_empleado="+IdEmpleado+" and software.tipo="+Tipo+" order by software.nombre ASC";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -310,15 +269,11 @@ public class SoftwareDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-            
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);            
             String sql="SELECT software.id_software,software.nombre,software.tipo,software.activa "
                     + "FROM empleado_software inner join software where "
                     + "empleado_software.id_software=software.id_software and "
                     + "empleado_software.id_empleado="+IdEmpleado+" and software.tipo="+Tipo+" order by software.nombre ASC";
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -351,14 +306,11 @@ public class SoftwareDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);            
             String sql="SELECT software.id_software,software.nombre,software.tipo,software.activa "
                     + "FROM cpu inner join software where "
                     + "cpu.id_software=software.id_software and "
                     + "cpu.id_cpu like '"+IdCPU+"'";
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -391,12 +343,9 @@ public class SoftwareDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);            
              String sql="INSERT INTO empleado_software (id_empleado,id_software) "
                      + "VALUES ('"+idEmpleado+"','"+idSoftware+"')";
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
            rpta = stmt.executeUpdate() == 1;
         } catch (Exception e) {
@@ -419,11 +368,9 @@ public class SoftwareDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);            
              String sql="Delete From empleado_software Where id_empleado="+idEmpleado+" and id_software="+idSoftware;
     
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
            rpta = stmt.executeUpdate() == 1;
         } catch (Exception e) {

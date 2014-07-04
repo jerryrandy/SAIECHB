@@ -4,10 +4,10 @@
  */
 package dao;
 
+
 import entidades.Marca;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +17,7 @@ import java.util.List;
  * @author Toditos
  */
 public class MarcaDAO {
-     public static String driver = "com.mysql.jdbc.Driver";
-    public static String url = "jdbc:mysql://localhost:3306/demo";
-    public static String usuario = "root";
-    public static String clave = "";
+    
 
             public static List<Marca> listarActivosOrdenado() throws Exception
     {
@@ -29,10 +26,8 @@ public class MarcaDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-             Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT id_marca,nombre,activa,descripcion FROM marca where activa=1 order by nombre ASC";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -66,10 +61,8 @@ public class MarcaDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-            Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT id_marca,nombre,activa,descripcion FROM marca order by nombre ASC";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -102,10 +95,8 @@ public class MarcaDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-            Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT id_marca,nombre,activa,descripcion FROM marca where nombre like '"+filtro+"%' order by nombre ASC";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -137,11 +128,9 @@ public class MarcaDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-            Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
              String sql="INSERT INTO marca (nombre,activa, descripcion) VALUES ('"+objMarca.getStr_nombre()+
                      "', '"+objMarca.getIntl_activa()+"','"+objMarca.getStr_descripcion()+"');";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
            rpta = stmt.executeUpdate() == 1;
         } catch (Exception e) {
@@ -163,12 +152,10 @@ public class MarcaDAO {
         Connection conn = null;
         CallableStatement stmt = null;
         try {
-            Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql=" UPDATE marca SET nombre='"+objMarca.getStr_nombre()+
                     "',activa='"+objMarca.getIntl_activa()+"',descripcion='"+objMarca.getStr_descripcion()+
                     "' WHERE id_marca = '"+objMarca.getInt_id_marca()+"'";
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             rpta = stmt.executeUpdate() == 1;
 
@@ -190,10 +177,8 @@ public class MarcaDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-            Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="Delete From marca Where id_marca="+IdMarca;
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             rpta = stmt.executeUpdate() == 1;
         } catch (Exception e) {

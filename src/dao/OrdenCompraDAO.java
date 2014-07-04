@@ -8,7 +8,6 @@ package dao;
 import entidades.OrdenCompra;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -21,10 +20,7 @@ import java.util.List;
  */
 public class OrdenCompraDAO {
     
-    public static String driver = "com.mysql.jdbc.Driver";
-    public static String url = "jdbc:mysql://localhost:3306/demo";
-    public static String usuario = "root";
-    public static String clave = "";   
+   
         
        public static String verificarNSerie(String nSerie) throws Exception {
          String rpta = "";
@@ -32,12 +28,8 @@ public class OrdenCompraDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-            
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);            
-            String sql="SELECT id_orden_compra From orden_compra Where id_orden_compra like '"+nSerie+"'";
-            
+             String sql="SELECT id_orden_compra From orden_compra Where id_orden_compra like '"+nSerie+"'";
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -66,17 +58,13 @@ public class OrdenCompraDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-            
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);            
              //SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");
             //String fechaNac = sdf.format(objOrdenCompra.getDat_fecha());
            Timestamp time  = new Timestamp(objOrdenCompra.getDat_fecha().getTime());
                String sql="INSERT INTO orden_compra (id_orden_compra,id_proveedor,fecha) VALUES ('"+
                        objOrdenCompra.getStr_id_orden_compra()+"','"+objOrdenCompra.getObjProveedor().getInt_id_proveedor()+
                        "','"+time+"');";
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
            rpta = stmt.executeUpdate() == 1;
            String idOrdem = objOrdenCompra.getStr_id_orden_compra();
@@ -110,12 +98,9 @@ public class OrdenCompraDAO {
         CallableStatement stmt = null;
         try {
 
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);
                String sql="INSERT INTO detalle_orden (id_orden_compra,id_componente) VALUES ('"+
                        IdOrden+"','"+IdComponente+"')";
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
            rpta = stmt.executeUpdate() == 1;
            

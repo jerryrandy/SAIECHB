@@ -1,25 +1,24 @@
-
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package dao;
 
 
-import static dao.CargoDAO.clave;
-import static dao.CargoDAO.driver;
-import static dao.CargoDAO.url;
-import static dao.CargoDAO.usuario;
 import entidades.*;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ *
+ * @author Toditos
+ */
 public class ComponenteDAO {
-     public static String driver = "com.mysql.jdbc.Driver";
-    public static String url = "jdbc:mysql://localhost:3306/demo";
-    public static String usuario = "root";
-    public static String clave = "";
+    
    
         
        public static String verificarNSerie(String nSerie) throws Exception {
@@ -28,10 +27,8 @@ public class ComponenteDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-            Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
              String sql="SELECT id_componente From componente Where id_componente like '"+nSerie+"'";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -60,12 +57,11 @@ public class ComponenteDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-             Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave); 
+                  
                String sql = "INSERT INTO componente (id_componente,id_modelo,estado,garantia,caracteristica)"
                        + " VALUES ('"+objComponente.getStr_id_componente()+"','"+objComponente.getObjModelo().getInt_id_modelo()
                        +"','"+objComponente.getInt_estado()+"','"+objComponente.getInt_garantia()+"','"+objComponente.getStr_caracteristica()+"')";
-          
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
            rpta = stmt.executeUpdate() == 1;
 
@@ -88,8 +84,6 @@ public class ComponenteDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {     
-              Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT componente.id_componente,componente.id_modelo,"
                     + "componente.estado,componente.garantia,componente.caracteristica,"
                     + "modelo.id_marca,modelo.id_tipo,modelo.nombre,modelo.caracteristica,"
@@ -98,7 +92,7 @@ public class ComponenteDAO {
                     + "join marca inner join tipo where cpu_componentes.id_componente=componente.id_componente "
                     + "and componente.id_modelo=modelo.id_modelo and modelo.id_marca=marca.id_marca "
                     + "and modelo.id_tipo=tipo.id_tipo and cpu_componentes.id_cpu  like '"+IdCPU+"' order by tipo.nombre ASC";
-          
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -150,8 +144,6 @@ public class ComponenteDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {     
-              Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT componente.id_componente,componente.id_modelo,"
                     + "componente.estado,componente.garantia,componente.caracteristica,"
                     + "modelo.id_marca,modelo.id_tipo,modelo.nombre,modelo.caracteristica,"
@@ -160,7 +152,7 @@ public class ComponenteDAO {
                     + "where componente.id_modelo=modelo.id_modelo and modelo.id_marca=marca.id_marca "
                     + "and modelo.id_tipo=tipo.id_tipo and componente.estado='"+Estado+"' and "
                     + "tipo.id_tipo='"+IdTipo+"' order by tipo.nombre ASC";
-         
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -214,8 +206,6 @@ public class ComponenteDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {     
-              Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT componente.id_componente,componente.id_modelo,"
                     + "componente.estado,componente.garantia,componente.caracteristica,"
                     + "modelo.id_marca,modelo.id_tipo,modelo.nombre,modelo.caracteristica,"
@@ -225,7 +215,7 @@ public class ComponenteDAO {
                     + "and modelo.id_tipo=tipo.id_tipo and componente.estado='"+Estado+"' and "
                     + "(modelo.nombre like '%"+filtro+"%' or marca.nombre like '%"+filtro+"%' "
                     + "or tipo.nombre like '%"+filtro+"%') order by tipo.nombre ASC";
-          
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -277,8 +267,6 @@ public class ComponenteDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {     
-            Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT detalle_orden.id_componente,componente.id_modelo,"
                     + "componente.estado,componente.garantia,componente.caracteristica,"
                     + "modelo.id_marca,modelo.id_tipo,modelo.nombre,modelo.caracteristica,"
@@ -294,7 +282,7 @@ public class ComponenteDAO {
                     + "(componente.id_componente like '"+filtro+"%' or modelo.nombre like '%"+filtro+"' or marca.nombre like '%"+filtro+"' "
                     + "or orden_compra.id_orden_compra like '%"+filtro+"' or proveedor.nombre like '%"+filtro+"' "
                     + "or tipo.nombre like '%"+filtro+"%') order by orden_compra.fecha DESC";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -367,8 +355,6 @@ public class ComponenteDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {     
-              Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT detalle_orden.id_componente,componente.id_modelo,"
                     + "componente.estado,componente.garantia,componente.caracteristica,"
                     + "modelo.id_marca,modelo.id_tipo,modelo.nombre,modelo.caracteristica,"
@@ -382,7 +368,7 @@ public class ComponenteDAO {
                     + "orden_compra.id_proveedor=proveedor.id_proveedor and componente.id_modelo=modelo.id_modelo "
                     + "and modelo.id_marca=marca.id_marca and modelo.id_tipo=tipo.id_tipo "
                     + "and componente.estado='"+Estado+"' order by orden_compra.fecha DESC";
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -456,8 +442,6 @@ public class ComponenteDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {     
-              Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT componente.id_componente,componente.id_modelo,"
                     + "componente.estado,componente.garantia,componente.caracteristica,"
                     + "modelo.id_marca,modelo.id_tipo,modelo.nombre,modelo.caracteristica,"
@@ -465,7 +449,7 @@ public class ComponenteDAO {
                     + "FROM componente inner join modelo inner join marca inner join tipo "
                     + "where componente.id_modelo=modelo.id_modelo and modelo.id_marca=marca.id_marca "
                     + "and modelo.id_tipo=tipo.id_tipo and componente.estado='"+Estado+"' order by tipo.nombre ASC";
-         
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -517,8 +501,6 @@ public class ComponenteDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {     
-              Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
            String sql="SELECT componente.id_componente,componente.id_modelo,componente.estado,"
                    + "componente.garantia,componente.caracteristica,modelo.id_marca,modelo.id_tipo,"
                    + "modelo.nombre,modelo.caracteristica,modelo.activa,marca.nombre,tipo.nombre,"
@@ -526,7 +508,7 @@ public class ComponenteDAO {
                    + "marca inner join tipo where componente.id_modelo=modelo.id_modelo and "
                    + "modelo.id_marca=marca.id_marca and modelo.id_tipo=tipo.id_tipo and componente.estado='"+Estado
                    + "' and tipo.ubicacion="+Ubicacion+" order by tipo.nombre ASC";
-          
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -577,10 +559,8 @@ public class ComponenteDAO {
         Connection conn = null;
         CallableStatement stmt = null;
         try {
-              Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="UPDATE componente SET estado='"+Estado+"' WHERE id_componente= '"+IdComponente+"'";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             rpta = stmt.executeUpdate() == 1;
 
@@ -603,8 +583,6 @@ public class ComponenteDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {     
-              Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
            String sql="SELECT componente.id_componente,componente.id_modelo,componente.estado,"
                    + "componente.garantia,componente.caracteristica,modelo.id_marca,modelo.id_tipo,"
                    + "modelo.nombre,modelo.caracteristica,modelo.activa,marca.nombre,tipo.nombre,"
@@ -612,7 +590,7 @@ public class ComponenteDAO {
                    + "marca inner join tipo where componente.id_modelo=modelo.id_modelo and "
                    + "modelo.id_marca=marca.id_marca and modelo.id_tipo=tipo.id_tipo "
                    + "and componente.id_componente like '"+IdCamponente+"'";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 

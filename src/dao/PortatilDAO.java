@@ -10,7 +10,6 @@ package dao;
 import entidades.*;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -23,23 +22,16 @@ import java.util.List;
  */
 public class PortatilDAO {
     
-    public static String driver = "com.mysql.jdbc.Driver";
-    public static String url = "jdbc:mysql://localhost:3306/demo";
-    public static String usuario = "root";
-    public static String clave = "";   
+   
          
-    public static String verificarNSerie(String nSerie) throws Exception {
+              public static String verificarNSerie(String nSerie) throws Exception {
          String rpta = "";
         Connection conn =null;
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-            
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);            
              String sql="SELECT id_impresora From impresora Where id_impresora="+nSerie;
-       
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -68,14 +60,11 @@ public class PortatilDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-               Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);
-            
+   
                String sql="INSERT INTO portatil (id_portatil,nombre,id_componente,id_empleado,id_software,estado) VALUES ('"+
                        objPortatil.getStr_id_portatil()+"','"+objPortatil.getStr_nombre()+"','"+objPortatil.getObjComponente().getStr_id_componente()+
                         "','"+objPortatil.getObjEmpleado().getInt_id_empleado()+"','"+objPortatil.getObjSoftware().getInt_id_software()+"','"+objPortatil.getInt_estado()+"');";
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
            rpta = stmt.executeUpdate() == 1;
             int IdEmpleado= objPortatil.getObjEmpleado().getInt_id_empleado();
@@ -108,10 +97,7 @@ public class PortatilDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         ResultSet dr = null;
-        try {          
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);            
+        try {               
                      String sql="SELECT portatil.id_portatil,portatil.nombre,portatil.id_componente,"
                              + "portatil.id_empleado,portatil.id_software,portatil.estado,empleado.id_cargo,"
                              + "empleado.id_area,empleado.apellidos,empleado.nombres,empleado.usuario,"
@@ -121,7 +107,7 @@ public class PortatilDAO {
                              + "portatil.id_empleado=empleado.id_empleado and empleado.id_area=area.id_area and "
                              + "area.id_departamento=departamento.id_departamento and empleado.id_cargo=cargo.id_cargo "
                              + "and portatil.id_software=software.id_software and portatil.estado='"+Estado+"' order by portatil.nombre ASC";
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -185,11 +171,7 @@ public class PortatilDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         ResultSet dr = null;
-        try {      
-            
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);            
+        try {               
                      String sql="SELECT portatil.id_portatil,portatil.nombre,portatil.id_componente,"
                              + "portatil.id_empleado,portatil.id_software,portatil.estado,empleado.id_cargo,"
                              + "empleado.id_area,empleado.apellidos,empleado.nombres,empleado.usuario,"
@@ -203,7 +185,7 @@ public class PortatilDAO {
                              + "area.nombre like '%"+filtro+"%' or empleado.usuario like '%"+filtro+"%' or empleado.nombres "
                              + "like '%"+filtro+"%' or empleado.apellidos like '%"+filtro+"%' or cargo.nombre like '%"+filtro+"%') "
                              + "order by portatil.nombre ASC";
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -267,18 +249,13 @@ public class PortatilDAO {
         Connection conn = null;
         CallableStatement stmt = null;
         try {
-            
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);
-            
             String sql=" UPDATE portatil SET nombre='"+objPortatil.getStr_nombre()+
                     "',id_componente='"+objPortatil.getObjComponente().getStr_id_componente()+
                     "',id_empleado='"+objPortatil.getObjEmpleado().getInt_id_empleado()+
                      "',id_software='"+objPortatil.getObjSoftware().getInt_id_software()+
                      "',estado='"+objPortatil.getInt_estado()+
                     "' WHERE id_portatil like '"+objPortatil.getStr_id_portatil()+"'";
-          
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             rpta = stmt.executeUpdate() == 1;
 

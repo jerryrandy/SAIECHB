@@ -9,7 +9,6 @@ package dao;
 import entidades.*;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -22,22 +21,16 @@ import java.util.List;
  */
 public class MonitorDAO {
     
-    public static String driver = "com.mysql.jdbc.Driver";
-    public static String url = "jdbc:mysql://localhost:3306/demo";
-    public static String usuario = "root";
-    public static String clave = "";   
+   
          
-    public static String verificarNSerie(String nSerie) throws Exception {
+              public static String verificarNSerie(String nSerie) throws Exception {
          String rpta = "";
         Connection conn =null;
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);            
              String sql="SELECT id_monitor From monitor Where id_monitor like '"+nSerie+"'";
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -66,13 +59,10 @@ public class MonitorDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);
+   
                String sql="INSERT INTO monitor (id_monitor,id_componente) VALUES ('"+
                        objMonitor.getStr_id_monitor()+"','"+objMonitor.getObjComponente().getStr_id_componente()+"');";
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
            rpta = stmt.executeUpdate() == 1;
           
@@ -89,18 +79,13 @@ public class MonitorDAO {
         return rpta;
     }
 
-    public static List<Monitor> ListarMonitorXEstado(int Estado) throws Exception
+          public static List<Monitor> ListarMonitorXEstado(int Estado) throws Exception
     {
         List<Monitor> listMonitor = null;
         Connection conn =null;
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {               
-            
-            Class.forName(driver);
-            
-            conn = DriverManager.getConnection(url,usuario,clave);     
-            
          String sql="SELECT monitor.id_monitor,monitor.id_componente,componente.id_modelo,"
                  + "componente.estado,componente.garantia,componente.caracteristica,"
                  + "modelo.id_marca,modelo.id_tipo,modelo.nombre,modelo.caracteristica,"
@@ -109,7 +94,7 @@ public class MonitorDAO {
                  + "join tipo where monitor.id_componente=componente.id_componente "
                  + "and componente.id_modelo=modelo.id_modelo and modelo.id_marca=marca.id_marca "
                     + "and modelo.id_tipo=tipo.id_tipo and componente.estado='"+Estado+"'";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 

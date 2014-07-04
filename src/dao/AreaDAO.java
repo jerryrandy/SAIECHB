@@ -1,11 +1,14 @@
-
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package dao;
+
 
 import entidades.Area;
 import entidades.Departamento;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +18,7 @@ import java.util.List;
  * @author Toditos
  */
 public class AreaDAO {
-     public static String driver = "com.mysql.jdbc.Driver";
-    public static String url = "jdbc:mysql://localhost:3306/demo";
-    public static String usuario = "root";
-    public static String clave = "";
+    
    
        public static List<Area> listarTodosOrdenadoIniciales() throws Exception
     {
@@ -27,11 +27,9 @@ public class AreaDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-            Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT area.id_area,area.id_departamento,area.nombre,area.activa,area.descripcion,departamento.nombre,departamento.iniciales "
                     + "FROM area inner join departamento where area.id_departamento=departamento.id_departamento order by area.nombre ASC";
-         
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -68,13 +66,11 @@ public class AreaDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-            Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT area.id_area,area.id_departamento,area.nombre,area.activa,area.descripcion,departamento.nombre,departamento.iniciales "
                     + "FROM area inner join departamento where area.id_departamento=departamento.id_departamento and area.nombre like '%"+filtro+"%'"
                     + " order by area.nombre ASC";
             
-          
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -110,12 +106,10 @@ public class AreaDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-              Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
              String sql="INSERT INTO area (id_departamento,nombre, activa, descripcion) VALUES ('"+
                      objArea.getObjDepartamento().getInt_id_departamento()+"','"+objArea.getStr_nombre()+
                      "', '"+objArea.getIntl_activa()+"','"+objArea.getStr_descripcion()+"');";
-          
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
            rpta = stmt.executeUpdate() == 1;
         } catch (Exception e) {
@@ -136,12 +130,10 @@ public class AreaDAO {
         Connection conn = null;
         CallableStatement stmt = null;
         try {
-            Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql=" UPDATE area SET nombre='"+objArea.getStr_nombre()+
                     "',activa='"+objArea.getIntl_activa()+"',id_departamento='"+objArea.getObjDepartamento().getInt_id_departamento()+"',descripcion='"+objArea.getStr_descripcion()+
                     "' WHERE id_area = '"+objArea.getInt_id_area()+"'";
-            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             rpta = stmt.executeUpdate() == 1;
 
@@ -164,10 +156,8 @@ public class AreaDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-             Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="Delete From area Where id_area="+IdArea;
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             rpta = stmt.executeUpdate() == 1;
         } catch (Exception e) {
@@ -190,12 +180,12 @@ public class AreaDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-              Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT area.id_area,area.id_departamento,area.nombre,area.activa,area.descripcion,departamento.nombre,departamento.iniciales "
                     + "FROM area inner join departamento where area.id_departamento=departamento.id_departamento and area.activa=1 and area.id_departamento="+IdDepartamento+" order by area.nombre ASC";
 
-          
+            conn = DBManager.getConnection();
+            
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 

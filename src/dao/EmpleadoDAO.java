@@ -1,33 +1,32 @@
-
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package dao;
-
 
 
 import entidades.*;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ *
+ * @author Toditos
+ */
 public class EmpleadoDAO {
-      public static String driver = "com.mysql.jdbc.Driver";
-    public static String url = "jdbc:mysql://localhost:3306/demo";
-    public static String usuario = "root";
-    public static String clave = "";
+    
     
               public static int insertar(Empleado objEmpleado) throws Exception
     {
         
         int rpta=-1;
-        Connection conn = null;
+        Connection conn =DBManager.getConnection();
         Statement stmt = null;
         try {
-             Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             stmt = (Statement) conn.createStatement();
             String sql="INSERT INTO empleado (id_cargo, id_area, apellidos,nombres,usuario,activa,estado) VALUES ('"+
                      objEmpleado.getObjCargo().getInt_id_cargo()+"','"+objEmpleado.getObjArea().getInt_id_area()+
@@ -61,14 +60,12 @@ public class EmpleadoDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-            Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
              String sql="UPDATE empleado SET id_cargo='"+objEmpleado.getObjCargo().getInt_id_cargo()+
                      "', id_area='"+objEmpleado.getObjArea().getInt_id_area()+
                      "',apellidos='"+objEmpleado.getStr_apellido()+"',nombres='"+objEmpleado.getStr_nombre()+
                      "',usuario='"+objEmpleado.getStr_usuario()+"',activa='"+objEmpleado.getInt_activa()+
                      "' WHERE id_empleado = '"+objEmpleado.getInt_id_empleado()+"'";
-          
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
            rpta = stmt.executeUpdate() == 1;
         } catch (Exception e) {
@@ -91,8 +88,6 @@ public class EmpleadoDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-             Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT empleado.id_empleado,empleado.id_cargo,empleado.id_area,empleado.apellidos,"
                     + "empleado.nombres,empleado.usuario,empleado.activa,empleado.estado,area.nombre,area.id_departamento,"
                     + "departamento.nombre,cargo.nombre from empleado inner join area inner join departamento "
@@ -103,7 +98,7 @@ public class EmpleadoDAO {
                     + "order by empleado.apellidos ASC";
                     
                    
-         
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -149,8 +144,6 @@ public class EmpleadoDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-             Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT empleado.id_empleado,empleado.id_cargo,empleado.id_area,empleado.apellidos,"
                     + "empleado.nombres,empleado.usuario,empleado.activa,empleado.estado,area.nombre,area.id_departamento,"
                     + "departamento.nombre,cargo.nombre from empleado inner join area inner join departamento "
@@ -161,7 +154,7 @@ public class EmpleadoDAO {
                     + "and empleado.estado="+Estado+"  order by empleado.apellidos ASC";
                     
                    
-          
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -207,8 +200,6 @@ public class EmpleadoDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-             Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT empleado.id_empleado,empleado.id_cargo,empleado.id_area,empleado.apellidos,"
                     + "empleado.nombres,empleado.usuario,empleado.activa,empleado.estado,area.nombre,area.id_departamento,"
                     + "departamento.nombre,cargo.nombre from empleado inner join area inner join departamento "
@@ -216,7 +207,7 @@ public class EmpleadoDAO {
                     + "and empleado.id_cargo=cargo.id_cargo order by empleado.apellidos ASC";
             
             
-          
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -262,8 +253,6 @@ public class EmpleadoDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-             Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT empleado.id_empleado,empleado.id_cargo,empleado.id_area,empleado.apellidos,"
                     + "empleado.nombres,empleado.usuario,empleado.activa,empleado.estado,area.nombre,area.id_departamento,"
                     + "departamento.nombre,cargo.nombre from empleado inner join area inner join departamento "
@@ -271,7 +260,7 @@ public class EmpleadoDAO {
                     + "and empleado.id_cargo=cargo.id_cargo and empleado.activa=1 order by empleado.apellidos ASC";
             
             
-          
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -318,15 +307,13 @@ public class EmpleadoDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-             Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT empleado.id_empleado,empleado.id_cargo,empleado.id_area,empleado.apellidos,"
                     + "empleado.nombres,empleado.usuario,empleado.activa,empleado.estado,area.nombre,area.id_departamento,"
                     + "departamento.nombre,cargo.nombre from empleado inner join area inner join departamento "
                     + "inner join cargo  where empleado.id_area=area.id_area and area.id_departamento=departamento.id_departamento "
                     + "and empleado.id_cargo=cargo.id_cargo and area.id_area="+idArea+" order by empleado.apellidos ASC";
             
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -372,8 +359,6 @@ public class EmpleadoDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-             Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT empleado.id_empleado,empleado.id_cargo,empleado.id_area,empleado.apellidos,"
                     + "empleado.nombres,empleado.usuario,empleado.activa,empleado.estado,area.nombre,area.id_departamento,"
                     + "departamento.nombre,cargo.nombre from empleado inner join area inner join departamento "
@@ -381,7 +366,7 @@ public class EmpleadoDAO {
                     + "and empleado.id_cargo=cargo.id_cargo and area.id_area="+idArea
                     +" and empleado.activa=1 and empleado.estado="+Estado+" order by empleado.apellidos ASC";
             
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -427,15 +412,13 @@ public class EmpleadoDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-             Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT empleado.id_empleado,empleado.id_cargo,empleado.id_area,empleado.apellidos,"
                     + "empleado.nombres,empleado.usuario,empleado.activa,empleado.estado,area.nombre,area.id_departamento,"
                     + "departamento.nombre,cargo.nombre from empleado inner join area inner join departamento "
                     + "inner join cargo  where empleado.id_area=area.id_area and area.id_departamento=departamento.id_departamento "
                     + "and empleado.id_cargo=cargo.id_cargo and empleado.activa=1 and empleado.estado="+Estado+" order by empleado.apellidos ASC";
             
-          
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -480,11 +463,9 @@ public class EmpleadoDAO {
         Connection conn = null;
         CallableStatement stmt = null;
         try {
-             Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="UPDATE empleado SET estado='"+Estado+
                     "' WHERE id_empleado = '"+IdEmpleado+"'";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             rpta = stmt.executeUpdate() == 1;
 
@@ -506,10 +487,8 @@ public class EmpleadoDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-             Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="Delete From empleado Where id_empleado="+IdEmpleado;
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             rpta = stmt.executeUpdate() == 1;
         } catch (Exception e) {

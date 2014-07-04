@@ -1,4 +1,7 @@
-
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package dao;
 
 
@@ -6,8 +9,9 @@ import entidades.CPU;
 import entidades.Software;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,10 +20,7 @@ import java.util.List;
  * @author Toditos
  */
 public class CPUDAO {
-     public static String driver = "com.mysql.jdbc.Driver";
-    public static String url = "jdbc:mysql://localhost:3306/demo";
-    public static String usuario = "root";
-    public static String clave = "";
+    
    
         
        public static boolean verificarNSerie(String nSerie) throws Exception {
@@ -27,9 +28,8 @@ public class CPUDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-             Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT * From cpu Where id_cpu="+nSerie;
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             rpta = stmt.executeUpdate() == 1;
         } catch (Exception e) {
@@ -50,11 +50,10 @@ public class CPUDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-             Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
+
                String sql="INSERT INTO cpu (id_cpu,id_software,estado) VALUES ('"+
                        objCPU.getStr_id_cpu()+"','"+objCPU.getObjSoftware().getInt_id_software()+"','"+objCPU.getInt_estado()+"');";
-          
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
            rpta = stmt.executeUpdate() == 1;
            String idCPU= objCPU.getStr_id_cpu();
@@ -88,11 +87,10 @@ public class CPUDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-             Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
+
                String sql="INSERT INTO cpu_componentes (id_cpu,id_componente,estado) VALUES ('"+
                        IdCPU+"','"+IdComponente+"','0')";
-          
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
            rpta = stmt.executeUpdate() == 1;
            
@@ -116,11 +114,9 @@ public class CPUDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-                         Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT cpu.id_cpu,cpu.id_software,cpu.estado,software.nombre FROM cpu inner join software "
                     + "where cpu.id_software=software.id_software and cpu.estado='"+Estado+"'  order by cpu.id_cpu ASC";
-          
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -157,12 +153,10 @@ public class CPUDAO {
         CallableStatement stmt = null;
         ResultSet dr = null;
         try {
-                         Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="SELECT cpu.id_cpu,cpu.id_software,cpu.estado,software.nombre FROM "
                     + "cpu inner join software where cpu.id_software=software.id_software "
                     + "and cpu.estado='"+Estado+"' and cpu.id_cpu like '"+filtro+"%' order by cpu.id_cpu ASC";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             dr = stmt.executeQuery();
 
@@ -198,11 +192,9 @@ public class CPUDAO {
         Connection conn = null;
         CallableStatement stmt = null;
         try {
-                         Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="UPDATE cpu SET estado='"+Estado+
                     "' WHERE id_cpu like '"+IdCPU+"'";
-           
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             rpta = stmt.executeUpdate() == 1;
 
@@ -224,10 +216,9 @@ public class CPUDAO {
         Connection conn = null;
         CallableStatement stmt = null;
         try {
-                         Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
             String sql="UPDATE cpu SET id_software='"+IdSoftware+
                     "' WHERE id_cpu like '"+IdCPU+"'";
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
             rpta = stmt.executeUpdate() == 1;
 
@@ -248,10 +239,9 @@ public class CPUDAO {
         Connection conn =null;
         CallableStatement stmt = null;
         try {
-                         Class.forName(driver);
-            conn=DriverManager.getConnection(url,usuario,clave);
              String sql="Delete From cpu_componentes Where id_cpu like '"+IdCPU+"' and id_componente like '"+IdComponente+"'";
     
+            conn = DBManager.getConnection();
             stmt = conn.prepareCall(sql);
            rpta = stmt.executeUpdate() == 1;
         } catch (Exception e) {
